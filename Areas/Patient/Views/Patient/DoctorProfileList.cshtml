@@ -1,0 +1,142 @@
+﻿@model IEnumerable<Hospital_Management.Areas.Doctor.Models.DoctorModel>
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "DoctorProfileList";Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DoctorProfileList</h1>
+<h4>WelCome, @Context.Session.GetString("name")</h4>
+
+<div>
+    <label for="datepicker">Select Date:</label>
+    <input type="date" id="datepicker">
+    <button id="showButton" class="btn btn-outline-primary ">View Schedules</button>
+</div>
+<table class="table" id="doctorTable">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Designation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Phone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Gender)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Etime)
+            </th>
+           
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Id)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Designation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Phone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Gender)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stime)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Etime)
+                </td>
+              
+            <td>
+                    <a asp-action="AddAppoinment"  asp-controller="Patient" asp-route-id="@item.User_Id">Add Appoinment</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+<script>
+    $(function () {
+        $('#showButton').click(function () {
+            var selectedDate = $('#datepicker').val();
+            alert(selectedDate);
+            $.ajax({
+                url: '/Patient/GetAppointmentsByDate',
+                type: 'GET',
+                data: { date: selectedDate },
+                success: function (response) {
+                    $('#doctorTable tbody').empty();
+                    if (response.length > 0) {
+                        // Create an object to store appointments grouped by doctor
+                        var appointmentsByDoctor = {};
+                        $.each(response, function (index, item) {
+                            // Check if the doctor already has appointments
+                            if (!appointmentsByDoctor[item.user_Id]) {
+                                // If not, create an array to store appointments
+                                appointmentsByDoctor[item.user_Id] = [];
+                            }
+                            // Push the current appointment to the array
+                            appointmentsByDoctor[item.user_Id].push(item);
+                        });
+
+                        // Iterate over appointmentsByDoctor object
+                        $.each(appointmentsByDoctor, function (doctorId, appointments) {
+                            // Create a row for the doctor
+                            var row = $('<tr>');
+                            row.append($('<td>').text(appointments[0].user_Id));
+                            row.append($('<td>').text(appointments[0].name));
+                            row.append($('<td>').text(appointments[0].designation));
+                            row.append($('<td>').text(appointments[0].phone));
+                            row.append($('<td>').text(appointments[0].gender));
+
+                            // Create a string to hold all available times for the doctor
+                            var availableTimes = "";
+                            $.each(appointments, function (index, appointment) {
+                                // Concatenate available times with a separator
+                                if (index > 0) {
+                                    availableTimes += ", ";
+                                }
+                                availableTimes += appointment.stime + " - " + appointment.etime;
+                            });
+                            // Append available times to the row
+                            row.append($('<td>').text(availableTimes));
+
+                            // Append add appointment link to the row
+                            row.append($('<td>').html('<a href="/Patient/Patient/AddAppoinment?id=' + doctorId + '">Add Appointment</a>'));
+
+                            // Append the row to the table body
+                            $('#doctorTable tbody').append(row);
+                        });
+                    } else {
+                        var row = $('<tr>');
+                        row.append($('<td colspan="6">').text('No doctors are available on the selected date.'));
+                        $('#doctorTable tbody').append(row);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log(error);
+                }
+            });
+        });
+    });
+</script>
+
+

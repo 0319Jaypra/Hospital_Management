@@ -1,0 +1,69 @@
+﻿@model IEnumerable<Hospital_Management.Areas.Doctor.Models.available>
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "DoctorAvailableProfileList";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>DoctorAvailableProfileList</h1>
+<h4>WelCome, @Context.Session.GetString("name")</h4>
+
+<div class="row">
+    <div class="col-md-6 text-left">
+        <p>
+            <a asp-action="AppoinmentLists" class="btn btn-secondary" asp-area="Doctor" asp-controller="Doctor">Patient List</a>
+        </p>
+    </div>
+    <div class="text-right">
+        <p>
+            <a  class= " btn btn-primary" asp-action="DoctorAvailableProfile">Create New Availability</a>
+        </p>
+    </div>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.User_Id)
+            </th>
+            <th>    
+                @Html.DisplayNameFor(model => model.Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.STime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ETime)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.STime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ETime)
+            </td>
+            <td>
+                    <a asp-action="DeleteDoctorAvailability" asp-controller="Doctor" asp-route-STime="@item.STime" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,0 +1,135 @@
+﻿@model Hospital_Management.Areas.User.Models.usermodel
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System - Login</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Custom styles */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            background-image: url('hospital-background.jpg'); /* Specify the path to your image */
+            background-size: cover; /* Cover the entire background */
+            background-position: center; /* Center the background image */
+        }
+
+        .header {
+            text-align: center;
+            padding: 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            margin-bottom: 30px;
+        }
+
+        .login-form-container {
+            max-width: 400px;
+            margin: auto;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+            background-color: #ffffff;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-weight: bold;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ced4da;
+            border-radius: 5px;
+            transition: border-color 0.2s;
+        }
+
+            .form-input:focus {
+                outline: none;
+                border-color: #007bff; /* Focus border color */
+            }
+
+        .btn-login {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            .btn-login:hover {
+                background-color: #0056b3; /* Button hover background color */
+            }
+
+        .btn-signup {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            background-color: #28a745;
+            color: #ffffff;
+            cursor: pointer;
+            text-decoration: none;
+            display: block;
+            text-align: center;
+            transition: background-color 0.2s;
+        }
+
+            .btn-signup:hover {
+                background-color: #218838; /* Button hover background color */
+            }
+    </style>
+</head>
+<body style="background-image: url('hospital-background.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat;">
+    <!-- Header -->
+    <div class="header">
+        <h1>Hospital Management System</h1>
+    </div>
+
+    <!-- Login Form -->
+    <div class="login-form-container">
+        <h2 class="text-center mb-4">Login</h2>
+        <form method="post" class="login-form" id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Email</label>
+                <input type="email" asp-for="Email" class="form-control form-input" id="emailInput" required>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" asp-for="Password" class="form-control form-input" id="passwordInput" required>
+            </div>
+            <button type="submit" class="btn btn-primary btn-login" id="loginButton">Login</button>
+            <br />
+            <br />
+            <a href="@Url.Action("AddUser", "User")" class="btn btn-success btn-signup">Sign Up</a>
+        </form>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+   
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (event) {
+            var email = document.getElementById("emailInput").value.trim();
+            var password = document.getElementById("passwordInput").value.trim();
+
+            if (email === "" || password === "") {
+                alert("Please enter email and password.");
+                event.preventDefault();
+            } else {
+                // You can add additional validation checks here if needed
+            }
+        });
+    </script>
+</body>
+</html>

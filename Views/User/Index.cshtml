@@ -1,0 +1,75 @@
+﻿@model IEnumerable<Hospital_Management.Areas.User.Models.usermodel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+<h4>WelCome, @Context.Session.GetString("name")</h4>
+
+<p>
+    <a asp-action="AddUser">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+           
+            <th>
+                @Html.DisplayNameFor(model => model.UserName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Password)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.RoleId)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           
+            <td>
+                @Html.DisplayFor(modelItem => item.UserName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Email)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Password)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.RoleId)
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+<td>
+    <a asp-action="Logout" asp-area="User" asp-controller="User" class="btn btn-outline-danger">Logout</a>
+</td>
+
+<style>
+    /* CSS for table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Hover effect */
+        .table tr:hover {
+            background-color: #f2f2f2;
+        }
+</style>

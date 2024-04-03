@@ -1,0 +1,42 @@
+﻿@model Hospital_Management.Areas.Doctor.Models.available
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "DeleteDoctorProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="DeleteDoctorAvailability" method="post">
+                <div class="form-group">
+                    <input type="hidden" asp-for="User_Id" />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Name</label>
+                    <input asp-for="Name" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label">Date</label>
+                    <input asp-for="Date" class="form-control" type="date" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="STime" class="control-label">Start Time</label>
+                    <input asp-for="STime" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ETime" class="control-label">End Time</label>
+                    <input asp-for="ETime" class="form-control" readonly />
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Delete" class="btn btn-danger" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

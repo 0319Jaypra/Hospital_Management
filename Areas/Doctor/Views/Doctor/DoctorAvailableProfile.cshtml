@@ -1,0 +1,114 @@
+﻿@model Hospital_Management.Areas.Doctor.Models.available
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "DoctorAvailableProfile"; 
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Doctor Available Profile</h1>
+
+<h4>WELCOME, @Context.Session.GetString("name").ToUpper()</h4>
+<style>
+    .reset-password-button {
+        position: fixed;
+        top: 20px; 
+        right: 20px;
+        padding: 10px 20px;
+        background-color: #007bff;
+        color: #ffffff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+        .reset-password-button:hover {
+            background-color: #0056b3;
+        }
+</style>
+    <button class="reset-password-button">Reset Password</button>
+
+
+<hr />
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="DoctorAvailableProfile">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="User_Id" class="control-label">User ID</label>
+                    <input asp-for="User_Id" class="form-control" />
+                    <span asp-validation-for="User_Id" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label">Name</label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Date" class="control-label">Date</label>
+                    <input asp-for="Date" class="form-control" type="date" min="@DateTime.Now.ToString("yyyy-MM-dd")" />
+                    <span asp-validation-for="Date" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="STime" class="control-label">Start Time</label>
+                    <select asp-for="STime" class="form-control">
+                        @for (int hour = 0; hour < 24; hour++)
+                        {
+                            <option value="@hour.ToString().PadLeft(2, '0'):00">@hour.ToString().PadLeft(2, '0'):00</option>
+                        }
+                    </select>
+                    <span asp-validation-for="STime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="ETime" class="control-label">End Time</label>
+                    <select asp-for="ETime" class="form-control">
+                        @for (int hour = 0; hour < 24; hour++)
+                        {
+                            <option value="@hour.ToString().PadLeft(2, '0'):00">@hour.ToString().PadLeft(2, '0'):00</option>
+                        }
+                    </select>
+                    <span asp-validation-for="ETime" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="reset-password-button">
+    <a asp-action="resetpassword" class="btn btn-outline-danger">Reset Password</a>
+</div>
+
+<div>
+    <a asp-action="DoctorAvailableProfileList">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Disable past dates in the date input field
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("Date").setAttribute("min", today);
+    </script>
+
+    <style>
+        /* Custom CSS styles */
+        .container {
+            margin-top: 20px;
+        }
+
+        .reset-password-button {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+        }
+    </style>
+}

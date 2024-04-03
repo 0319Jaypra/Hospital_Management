@@ -1,0 +1,189 @@
+﻿@model Hospital_Management.Areas.Patient.Models.AppoinmnetModel
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "AddAppoinment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>AddAppoinment</h1>
+
+<h4>WelCome, @Context.Session.GetString("name")</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="AddAppoinment" id="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="form-group">
+                <label asp-for="User_Id" class="control-label"></label>
+                <input asp-for="User_Id" class="form-control" readonly />
+                <span asp-validation-for="User_Id" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Patient_Name" class="control-label"></label>
+                <input asp-for="Patient_Name" class="form-control" />
+                <span asp-validation-for="Patient_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Doctor_Name" class="control-label"></label>
+                <input asp-for="Doctor_Name" class="form-control" id="dname" />
+                <span asp-validation-for="Doctor_Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Date" class="control-label"></label>
+                <input asp-for="Date" class="form-control" type="date"  min="@DateTime.Today" />
+                <span asp-validation-for="Date" id="date" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TimeDuration" class="control-label"></label>
+                <select asp-for="TimeDuration" class="form-control">
+                    <option value="">-- Select Time --</option>
+                    <option value="30">30 min</option>
+                    <option value="60">60 min</option>
+                </select>
+                <span asp-validation-for="TimeDuration" class="text-danger" id="date"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Time" class="control-label"></label>
+
+                <select asp-for="Time" class="form-control">
+                    <option value="">-- Select Time --</option>
+                    @{
+                        for (int hour = 0; hour < 24; hour++)
+                        {
+                            for (int minute = 0; minute < 60; minute += 30)
+                            {
+                                <option>@hour.ToString("D2"):@minute.ToString("D2")</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="etime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="etime" class="control-label"></label>
+
+                <select asp-for="etime" class="form-control">
+                    <option value="">-- Select Time --</option>
+                    @{
+                        for (int hour = 0; hour < 24; hour++)
+                        {
+                            for (int minute = 0; minute < 60; minute += 30)
+                            {
+                                <option>@hour.ToString("D2"):@minute.ToString("D2")</option>
+                            }
+                        }
+                    }
+                </select>
+                <span asp-validation-for="etime" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" id="submit" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="AppoinmnetLists">Back to List</a>
+</div>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById("Date").setAttribute("min", today);
+    </script>
+    <script>
+        $('#Date').on('change', function () {
+            var date = $(this).val();
+            var doctorName = $('#dname').val();
+            var TimeDuration = $('#TimeDuration').val();
+
+            console.log("Doctor Name:", doctorName);
+
+            $.ajax({
+                url: '/Patient/GetAvailableTimes',
+                type: 'GET',
+                data: { date: date, doctorName: doctorName, TimeDuration: TimeDuration },
+                success: function (result) {
+                    $('#Time').empty();
+                    $.each(result.availableTimes, function (index, time) {
+                        $('#Time').append($('<option>', {
+                            value: time,
+                            text: time
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('An error occurred while fetching available times:', textStatus, errorThrown);
+                }
+            });
+        });
+
+        $('#TimeDuration').on('click', function () {
+            var date = $('#Date').val();
+            var doctorName = $('#dname').val();
+            var timePeriod = $('#TimeDuration').val();
+            if (date < Date.now()) {
+                return timePeriod;
+            }
+            console.log("Doctor Name:", doctorName);
+
+            $.ajax({
+                url: '/Patient/GetAvailableTime',
+                type: 'GET',
+                data: { date: date, doctorName: doctorName, TimeDuration: TimeDuration },
+                success: function (result) {
+                    $('#Time').empty();
+                    $.each(result.availableTimes, function (index, time) {
+                        $('#Time').append($('<option>', {
+                            value: time,
+                            text: time
+                        }));
+                    });
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.error('An error occurred while fetching available times:', textStatus, errorThrown);
+                }
+            });
+        });
+
+        $('#Time, #TimeDuration').on('click', function () {
+            var startTime = $('#Time').val();
+            var timePeriod = $('#TimeDuration').val();
+            var startHour = parseInt(startTime.split(':')[0]);
+            var startMinute = parseInt(startTime.split(':')[1]);
+            var endTimeOptions = [];
+
+            if (timePeriod == '30') {
+                var endHour = startHour;
+                var endMinute = startMinute + 30;
+                if (endMinute >= 60) {
+                    endHour++;
+                    endMinute -= 60;
+                }
+                endTimeOptions.push(endHour.toString().padStart(2, '0') + ':' + endMinute.toString().padStart(2, '0'));
+            } else if (timePeriod == '60') {
+                var endHour = startHour + 1;
+                var endMinute = startMinute;
+                if (endHour >= 24) {
+                    endHour = 0;
+                }
+                endTimeOptions.push(endHour.toString().padStart(2, '0') + ':' + endMinute.toString().padStart(2, '0'));
+            }
+
+            $('#etime').empty();
+            $.each(endTimeOptions, function (index, time) {
+                $('#etime').append($('<option>', {
+                    value: time,
+                    text: time
+                }));
+            });
+        });
+    </script>
+
+}

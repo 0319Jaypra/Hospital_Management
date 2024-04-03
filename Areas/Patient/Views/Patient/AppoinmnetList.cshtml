@@ -1,0 +1,116 @@
+﻿@model IEnumerable<Hospital_Management.Areas.Patient.Models.AppoinmnetModel>
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "AppoinmnetList"; Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>AppoinmnetList</h1>
+<h4>WelCome, @Context.Session.GetString("name")</h4>
+
+<p>
+    <button class="btn btn-outline-dark"><a asp-action="DoctorProfileList">Create New</a></button>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Appoinment_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.User_Id)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Doctor_Name)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TimeDuration)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Time)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.etime)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Appoinment_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.User_Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient_Name)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Doctor_Name)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Date)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TimeDuration)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Time)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.etime)
+                </td>
+           
+        </tr>
+}
+    </tbody>
+</table>
+
+<style>
+    .btn a {
+        color: black; 
+        text-decoration: none;
+    }
+
+        .btn a:hover {
+            text-decoration: none; 
+            color: white; 
+        }
+    /* Style for the table */
+    .table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+    
+    /* Style for table header */
+    .table th {
+        background-color: #f2f2f2;
+        text-align: left;
+        padding: 8px;
+    }
+    
+    /* Style for table rows */
+    .table td {
+        border-bottom: 1px solid #ddd;
+        padding: 8px;
+    }
+    
+    /* Style for alternating row colors */
+    .table tbody tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    /* Style for hover effect */
+    .table tbody tr:hover {
+        background-color: #ddd;
+    }
+</style>
+
